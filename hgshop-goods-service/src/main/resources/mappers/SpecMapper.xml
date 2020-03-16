@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuhao.hgshop.dao.SpecDao">
+   
+   
+    <!--  List<Spec> list(String name); -->
+    <!-- 规格表的查询sql 主表-->
+    <select id="list" resultMap="specMaper">
+         select * from  hg_spec
+         
+          <where>
+              <if test="value != null and value != ''">
+                 spec_name like concat('%',#{value},'%')
+              </if>
+          </where>
+          ORDER BY id
+    </select>
+    
+    	<select id="listAll" resultType="Spec">
+   		select id, spec_name as specName from hg_spec ORDER BY spec_name
+   	</select>
+    
+    
+    
+    <resultMap type="Spec" id="specMaper">
+        <id property="id" column="id"></id>
+   		<result property="specName" column="spec_name"/>
+      <collection property="options" 
+                  column="id"
+                  select="selectOptions">
+      </collection>
+    </resultMap>
+    
+	<select id="selectOptions" resultType="SpecOption">
+	
+	SELECT id,option_name as optionName,spec_id as specId ,orders
+   		  FROM hg_spec_option WHERE spec_id=#{value}
+	
+	</select>
+	
+	<!-- int addSpec(Spec spec); -->
+     <insert id="addSpec" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO hg_spec(spec_name) values(#{specName})
+	</insert>
+	
+	
+	<!-- int addOption(SpecOption specOption); -->
+     <insert id="addOption">
+		INSERT INTO hg_spec_option(option_name,spec_id,orders) 
+		   VALUES(#{optionName},#{specId},#{orders})
+	</insert>
+	
+	
+	<!-- int updateSpec(Spec spec); -->
+	<update id="updateSpec">
+		update hg_spec set spec_name=#{specName}
+		where id=#{id}
+	</update>
+
+	<!-- int deleteSpecOtions(int id); -->
+     <delete id="deleteSpecOtions">
+		delete from hg_spec_option WHERE spec_id = #{value}
+	</delete>
+	
+	
+	<!-- int deleteSpec(int id); -->
+     <delete id="deleteSpec">
+		delete from hg_spec WHERE id = #{value}
+	</delete>
+	<!-- Spec get(int id); -->
+     <select id="get"  resultMap="specMaper">
+   		select * from hg_spec  WHERE id=#{value}
+	</select>
+	<!-- int deleteSpecOtionsBatch(int[] ids); -->
+	<delete id="deleteSpecOtionsBatch">
+        delete from hg_spec_option WHERE spec_id in
+    	<foreach collection="array" open="(" close=")" separator="," item="specid">
+    		#{specid}
+    	</foreach>
+    </delete>
+    
+	<!-- int deleteSpecBatch(int[] ids); -->
+    <delete id="deleteSpecBatch">
+		delete from hg_spec WHERE id  in
+    	<foreach collection="array" open="(" close=")" separator="," item="specid">
+    		#{specid}
+    	</foreach>
+	</delete>
+   
+   
+</mapper>

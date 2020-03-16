@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuhao.hgshop.dao.SpuDao">
+
+	<!--  
+	private Integer	id; 
+	private String	goodsName;
+	private String	isMarketable; // 是否上线
+	private int	brandId;  //品牌
+	private String	caption; // 标题
+	private int	categoryId; // 分类
+	private String	smallPic; //小图
+	
+	private Brand	brand;
+	private Category category;-->
+	<resultMap type="spu" id="spuMaper">
+		<id column="id" property="id"></id>
+		<result column="goods_name" property="goodsName"/>
+		<result column="is_marketable" property="isMarketable"/>
+		<result column="brand_id" property="brandId"/>
+		<result column="caption" property="caption"/>
+		<result column="category_id" property="categoryId"/>
+		<result column="small_pic" property="smallPic"/>
+		<association property="brand" column="brand_id" select="com.liuhao.hgshop.dao.BrandDao.get"></association>
+		<association property="category" column="category_id" select="com.liuhao.hgshop.dao.CategoryDao.findById"></association>
+	</resultMap>
+
+	<!-- int add(Spu spu); -->
+     <insert id="add" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into hg_spu(goods_name,is_marketable,brand_id,caption,category_id,small_pic)
+		values(#{goodsName},#{isMarketable},#{brandId},#{caption},#{categoryId},#{smallPic})
+	</insert>
+	<!-- int deleteSpuBatch(int[] ids); -->
+
+	<!-- int update(Spu spu); -->
+
+	<!-- List<Spu> list(SpuVo vo); -->
+	<select id="list" resultMap="spuMaper" >
+		select * from hg_spu 
+	</select>
+
+	<!-- int delete(int id); -->
+	
+	
+	<select id="findById" resultMap="spuMaper">
+		SELECT * from hg_spu  WHERE id=#{value}
+	</select>
+
+</mapper>

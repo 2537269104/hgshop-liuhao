@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liuhao.hgshop.dao.OrderDao">
+
+	<resultMap type="OrderDetail" id="orderDetailMapper">
+		<id property="id" column="id"/>
+		<association property="sku" column="skuid" select="findSkuByid"></association>
+	</resultMap>
+	
+	<select id="findSkuByid" resultType="sku">
+		select id,title,price from hg_sku where id=#{value}
+	</select>
+	
+	<!-- int addDetail(OrderDetail orderDetail); -->
+	<insert id="addDetail">
+		INSERT INTO ordersdetail(skuid,total,oid,pnum) 
+		values(#{skuid},#{total},#{oid},#{pnum})
+	</insert>
+	
+
+<!-- 	int add(Order order); -->
+	<insert id="add" useGeneratedKeys="true" keyColumn="oid" keyProperty="oid">
+		INSERT INTO orders(uid,sumtotal,address,create_time)
+		    values(#{uid},#{sumtotal},#{address},now())
+	</insert>
+	
+	<select id="listDetail" resultMap="orderDetailMapper">
+		select * from  ordersdetail WHERE oid=#{value}
+	</select>
+	<!-- list(int userId); -->
+	<select id="list" resultType="order">
+		select * FROM orders where uid=#{value}
+	</select>
+</mapper>
