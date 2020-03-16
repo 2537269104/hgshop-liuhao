@@ -5,6 +5,9 @@ import java.util.List;
 import com.github.pagehelper.PageInfo;
 import com.liuhao.hgshop.pojo.Brand;
 import com.liuhao.hgshop.pojo.Category;
+import com.liuhao.hgshop.pojo.Sku;
+import com.liuhao.hgshop.pojo.Spu;
+import com.liuhao.hgshop.pojo.SpuVo;
 
 /**
  * 商品的服务接口
@@ -70,4 +73,21 @@ public interface GoodsService {
 	 */
 	List<Category> treeCategory(); 
 	
+	// spu的管理
+		PageInfo<Spu>  listSpu(int page,SpuVo vo);
+		int addSpu(Spu spu);
+		int updateSpu(Spu spu);
+		int deleteSpu(int id);
+		int deleteSpuBatch(int[] id);
+		List<Brand> getAllBrands();
+		// sku的管理
+		PageInfo<Sku>  listSku(int page,Sku sku);
+		int addSku(Sku sku);
+		Sku getSku(int id);//获取详情
+		int updateSku(Sku sku);
+		int deleteSku(int id);
+		Spu getSpu(int id);
+		int deleteSkuBatch(int[] id);
+		
+		public List<Sku> listSkuBySpu(int spuId);
 }

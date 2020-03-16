@@ -304,5 +304,8 @@
 		<module>hgshop-goods-interface</module>
 		<module>hgshop-goods-manager</module>
 		<module>hgshop-goods-service</module>
+		<module>hgshop-user-interface</module>
+		<module>hgshop-user-service</module>
+		<module>hgshop-web</module>
 	</modules>
 </project>
